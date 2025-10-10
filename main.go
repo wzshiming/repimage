@@ -49,6 +49,7 @@ func serve(w http.ResponseWriter, r *http.Request, admit utils.AdmitFunc) {
 	respBytes, err := json.Marshal(resAdmissionReview)
 	if err != nil {
 		klog.Error(err)
+		return
 	}
 	if _, err := w.Write(respBytes); err != nil {
 		klog.Error(err)

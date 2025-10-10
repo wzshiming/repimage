@@ -62,13 +62,13 @@ func AdmitPods(ar admissionv1.AdmissionReview) *admissionv1.AdmissionResponse {
 			Value:  pod.Spec,
 		},
 	}
-	podSpecJson, err := json.Marshal(podSpec)
+	podSpecJSON, err := json.Marshal(podSpec)
 	if err != nil {
 		klog.Error(err)
 		return ToAdmissionResponse(err)
 	}
 
-	reviewResponse.Patch = podSpecJson
+	reviewResponse.Patch = podSpecJSON
 	jsonPatchType := admissionv1.PatchTypeJSONPatch
 	reviewResponse.PatchType = &jsonPatchType
 
