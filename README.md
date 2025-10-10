@@ -23,12 +23,8 @@ k8s.gcr.io/coredns/coredns => m.daocloud.io/k8s.gcr.io/coredns/coredns
 nginx => m.daocloud.io/docker.io/library/nginx
 ```
 # 注意事项：
- - 只有在 [public-image-mirror
-   ](https://github.com/DaoCloud/public-image-mirror/blob/main/domain.txt)中的地址才会被替换，否则不会被替换
  - 替换的方式是**增加前缀**方式，不是**替换**方式
  - 目前只支持在amd64架构下的镜像替换，如果需要可以自行编译打包是使用
-
-
 
 # License
 
@@ -36,4 +32,5 @@ Apache-2.0
 
 # 特别感谢
 
-- [DaoCloud](https://github.com/DaoCloud)免费提供的镜像代理服务
+- [@shixinghong](https://github.com/shixinghong) 感谢原作者提供的灵感
+- [DaoCloud](https://github.com/DaoCloud) 免费提供的镜像代理服务

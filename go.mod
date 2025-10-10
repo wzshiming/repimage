@@ -1,4 +1,4 @@
-module github.com/shixinghong/repimage
+module github.com/wzshiming/repimage
 
 go 1.24
 

@@ -6,7 +6,7 @@ import (
 	"io"
 	"net/http"
 
-	"github.com/shixinghong/repimage/pkg/utils"
+	"github.com/wzshiming/repimage/pkg/utils"
 	v1 "k8s.io/api/admission/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/klog/v2"
