@@ -5,7 +5,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-// AdmitFunc 处理不同种类的请求
 type AdmitFunc func(v1.AdmissionReview) *v1.AdmissionResponse
 
 // ToAdmissionResponse converts an error into an AdmissionResponse
