@@ -3,7 +3,7 @@
 很多镜像都在国外。国内下载很慢，需要加速，每次都要手动修改yaml文件中的镜像地址，很麻烦。这个项目就是为了解决这个问题。
 
 用于替换k8s中一些在国内无法访问的镜像地址，替换的镜像地址在 [public-image-mirror
-](https://github.com/DaoCloud/public-image-mirror/blob/main/domain.txt)中查看
+](https://github.com/DaoCloud/public-image-mirror)中查看
 
 # 快速上手
 ## 安装
