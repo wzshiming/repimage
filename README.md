@@ -7,6 +7,14 @@
 
 # 快速上手
 ## 安装
+
+### 使用预构建的镜像
+Docker 镜像已发布到 GitHub Container Registry (ghcr.io):
+```shell
+docker pull ghcr.io/wzshiming/repimage:latest
+```
+
+### 从源码安装
 ```shell
 git clone https://github.com/shixinghong/repimage.git
 cd repimage 
