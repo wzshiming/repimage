@@ -19,7 +19,10 @@ var (
 )
 
 func ReplaceImageName(name string) string {
-	domainMap := GetDomainMap()
+	return ReplaceImageNameWithDomainMap(name, GetDomainMap())
+}
+
+func ReplaceImageNameWithDomainMap(name string, domainMap map[string]string) string {
 	parts := strings.SplitN(name, "/", 3)
 	switch len(parts) {
 	case 1:

@@ -17,6 +17,10 @@ type patchSpec struct {
 }
 
 func AdmitPods(ar admissionv1.AdmissionReview) *admissionv1.AdmissionResponse {
+	return AdmitPodsWithDomainMap(ar, nil)
+}
+
+func AdmitPodsWithDomainMap(ar admissionv1.AdmissionReview, domainMap map[string]string) *admissionv1.AdmissionResponse {
 	klog.Info("admitting pods...")
 	podResource := metav1.GroupVersionResource{
 		Group:    "",
@@ -43,7 +47,11 @@ func AdmitPods(ar admissionv1.AdmissionReview) *admissionv1.AdmissionResponse {
 	reviewResponse := admissionv1.AdmissionResponse{}
 	containers := pod.Spec.Containers
 	for i, container := range containers {
-		containers[i].Image = ReplaceImageName(container.Image)
+		if domainMap == nil {
+			containers[i].Image = ReplaceImageName(container.Image)
+		} else {
+			containers[i].Image = ReplaceImageNameWithDomainMap(container.Image, domainMap)
+		}
 	}
 
 	klog.Info(pod.Spec.Containers)
