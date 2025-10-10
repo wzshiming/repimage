@@ -5,8 +5,6 @@ metadata:
   namespace: kube-system
   labels:
     app: repimage
-  annotations:
-    cert-manager.io/inject-ca-from: kube-system/repimage-webhook-cert
 webhooks:
 - admissionReviewVersions:
   - v1
