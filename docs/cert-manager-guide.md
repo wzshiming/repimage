@@ -6,6 +6,31 @@
 
 ### Cert-Manager 证书链
 
+```
+┌─────────────────────────────────────────────────────────────┐
+│                    Cert-Manager 证书架构                      │
+├─────────────────────────────────────────────────────────────┤
+│                                                               │
+│  1. Self-Signed ClusterIssuer (repimage-selfsigned-issuer)   │
+│     │                                                         │
+│     ├──> 2. CA Certificate (repimage-ca)                     │
+│          │   - Secret: repimage-ca-secret                    │
+│          │                                                    │
+│          ├──> 3. CA Issuer (repimage-ca-issuer)              │
+│               │                                               │
+│               ├──> 4. Server Certificate (repimage-webhook-cert) │
+│                    - Secret: repimage-webhook-tls            │
+│                    - DNS: repimage.kube-system.svc           │
+│                    - Validity: 1 year                        │
+│                    - Auto-renew: 30 days before expiry       │
+│                                                               │
+│  5. CA Bundle Auto-Injection                                 │
+│     - Cert-Manager injects CA to MutatingWebhookConfiguration │
+│     - Annotation: cert-manager.io/inject-ca-from             │
+│                                                               │
+└─────────────────────────────────────────────────────────────┘
+```
+
 1. **Self-Signed ClusterIssuer** (`repimage-selfsigned-issuer`)
    - 用于生成根 CA 证书的自签名颁发者
    - 作用域：集群级别
