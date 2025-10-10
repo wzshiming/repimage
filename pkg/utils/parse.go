@@ -13,6 +13,10 @@ const (
 
 func ReplaceImageName(name string) string {
 	parts := strings.SplitN(name, "/", 3)
+	if parts[0] == prefix {
+		return name
+	}
+
 	switch len(parts) {
 	case 1:
 		return strings.Join([]string{prefix, defaultDomain, officialRepoName, parts[0]}, "/")

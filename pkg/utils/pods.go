@@ -37,17 +37,24 @@ func AdmitPods(ar admissionv1.AdmissionReview) *admissionv1.AdmissionResponse {
 		return ToAdmissionResponse(err)
 	}
 
-	klog.Info(pod)
-
-	// 定义准入规则
 	reviewResponse := admissionv1.AdmissionResponse{}
 	containers := pod.Spec.Containers
+
+	var updated bool
 	for i, container := range containers {
-		containers[i].Image = ReplaceImageName(container.Image)
+		newImage := ReplaceImageName(container.Image)
+		if newImage != container.Image {
+			containers[i].Image = newImage
+			updated = true
+		}
 	}
 
-	klog.Info(pod.Spec.Containers)
 	reviewResponse.Allowed = true
+
+	if !updated {
+		return &reviewResponse
+	}
+
 	podSpec := []patchSpec{
 		{
 			Option: "replace",
@@ -60,8 +67,6 @@ func AdmitPods(ar admissionv1.AdmissionReview) *admissionv1.AdmissionResponse {
 		klog.Error(err)
 		return ToAdmissionResponse(err)
 	}
-
-	klog.Info(string(podSpecJson))
 
 	reviewResponse.Patch = podSpecJson
 	jsonPatchType := admissionv1.PatchTypeJSONPatch
