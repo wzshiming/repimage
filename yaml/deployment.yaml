@@ -1,0 +1,27 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: repimage
+  name: repimage
+  namespace: kube-system
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: repimage
+  template:
+    metadata:
+      labels:
+        app: repimage
+      name: repimage
+    spec:
+      restartPolicy: Always
+      containers:
+      - command:
+        - /repimage
+        image: repimage
+        imagePullPolicy: IfNotPresent
+        name: webhook
+        ports:
+        - containerPort: 443

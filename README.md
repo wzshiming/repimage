@@ -8,14 +8,11 @@
 # 快速上手
 ## 安装
 ```shell
-git clone https://github.com/shixinghong/repimage.git
-cd repimage 
-kubectl apply -f  yaml/webhook.yaml ## 一定要先安装webhook的服务 ready之后再安装admission
-kubectl apply -f  yaml/admission.yaml
+kubectl create -k yaml
 ```
 ## 卸载
 ```shell
-kubectl delete -f  yaml/webhook.yaml -f yaml/admission.yaml
+kubectl delete -k yaml
 ```
 
 # 使用后效果
