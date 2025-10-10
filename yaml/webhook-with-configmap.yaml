@@ -1,0 +1,83 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: repimage-allowlist
+  namespace: kube-system
+data:
+  allowlist.txt: |
+    # Custom domain allowlist for repimage
+    # Format: original_domain=mirror_domain
+    
+    # Docker Hub
+    docker.io=m.daocloud.io/docker.io
+    
+    # Google Container Registry
+    gcr.io=m.daocloud.io/gcr.io
+    k8s.gcr.io=m.daocloud.io/k8s.gcr.io
+    
+    # Kubernetes Registry
+    registry.k8s.io=m.daocloud.io/registry.k8s.io
+    
+    # GitHub Container Registry
+    ghcr.io=m.daocloud.io/ghcr.io
+    
+    # Quay.io
+    quay.io=m.daocloud.io/quay.io
+    
+    # Add your custom mappings below
+    # example.com=mirror.example.com/example.com
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: repimage
+  namespace: kube-system
+  labels:
+    app: repimage
+spec:
+  replicas: 1
+  template:
+    metadata:
+      name: repimage
+      labels:
+        app: repimage
+    spec:
+      containers:
+        - name: webhook
+          image: registry.cn-beijing.aliyuncs.com/laoq/repimage:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8080
+          command:
+            - /repimage
+          env:
+            # Use custom allowlist from ConfigMap
+            - name: ALLOWLIST_FILE
+              value: "/config/allowlist.txt"
+            # Disable periodic updates (use file only)
+            - name: ALLOWLIST_UPDATE_INTERVAL
+              value: "0"
+          volumeMounts:
+            - name: allowlist
+              mountPath: /config
+      volumes:
+        - name: allowlist
+          configMap:
+            name: repimage-allowlist
+      restartPolicy: Always
+  selector:
+    matchLabels:
+      app: repimage
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: repimage
+  namespace: kube-system
+spec:
+  selector:
+    app: repimage
+  ports:
+    - port: 443
+      targetPort: 8080
+  type: ClusterIP
