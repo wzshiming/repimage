@@ -22,6 +22,8 @@ func serve(w http.ResponseWriter, r *http.Request, admit utils.AdmitFunc) {
 	if r.Body != nil {
 		if data, err := io.ReadAll(r.Body); err == nil {
 			body = data
+		} else {
+			klog.Errorf("failed to read request body: %v", err)
 		}
 	}
 
