@@ -18,9 +18,6 @@ k8s.gcr.io/coredns/coredns => m.daocloud.io/k8s.gcr.io/coredns/coredns
 
 nginx => m.daocloud.io/docker.io/library/nginx
 ```
-# 注意事项：
- - 替换的方式是**增加前缀**方式，不是**替换**方式
- - 支持amd64和arm64架构的镜像替换
 
 # License
 
