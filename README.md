@@ -1,5 +1,7 @@
 # repimage
 
+[![Docker](https://github.com/wzshiming/repimage/actions/workflows/docker-publish.yml/badge.svg)](https://github.com/wzshiming/repimage/actions/workflows/docker-publish.yml)
+
 很多镜像都在国外。国内下载很慢，需要加速，每次都要手动修改yaml文件中的镜像地址，很麻烦。这个项目就是为了解决这个问题。
 
 用于替换k8s中一些在国内无法访问的镜像地址，替换的镜像地址在 [public-image-mirror
