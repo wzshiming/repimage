@@ -21,14 +21,6 @@ spec:
             - containerPort: 8080
           command:
             - /repimage
-          volumeMounts:
-            - name: webhook-certs
-              mountPath: /etc/webhook/certs
-              readOnly: true
-      volumes:
-        - name: webhook-certs
-          secret:
-            secretName: repimage-webhook-tls
       restartPolicy: Always
   selector:
     matchLabels:

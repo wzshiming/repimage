@@ -1,0 +1,47 @@
+apiVersion: admissionregistration.k8s.io/v1
+kind: MutatingWebhookConfiguration
+metadata:
+  name: repimage
+  namespace: kube-system
+webhooks:
+  - name: repimage.kube-system.svc
+    #    namespaceSelector:
+    #      matchExpressions:
+    #        - key: type
+    #          operator: In
+    #          values: [ "tenant" ]
+    rules:
+      - operations: [ "CREATE","UPDATE" ]
+        apiGroups: [ "" ]
+        apiVersions: [ "v1" ]
+        resources: [ "pods" ]
+    admissionReviewVersions: [ "v1","v1bate1" ]
+    clientConfig:
+      caBundle: |
+        LS0tLS1CRUdJTiBDRVJUSUZJQ0FURS0tLS0tCk1JSUREekNDQWZlZ0F3SUJBZ0lVT21RakdrTFh1
+        NWp3MGhLQ2VMUitweEVvRTZFd0RRWUpLb1pJaHZjTkFRRUwKQlFBd0ZqRVVNQklHQTFVRUF3d0xj
+        bVZ3YVcxaFoyVmZZMkV3SUJjTk1qUXdNakk0TURnek1UTXdXaGdQTWpJNQpOekV5TVRNd09ETXhN
+        ekJhTUJZeEZEQVNCZ05WQkFNTUMzSmxjR2x0WVdkbFgyTmhNSUlCSWpBTkJna3Foa2lHCjl3MEJB
+        UUVGQUFPQ0FROEFNSUlCQ2dLQ0FRRUFzRms1SGtya0ZwY091VHBCNTBWYi8zL1R6YW11Wnp2OVZE
+        RE8KTkNYUGl3N1lDcVZSaDRSTjl2MDdQc2FubkJGZElHRUpIV2xMRS9SUE5lYmZNUGJFRjQrSEFs
+        cGw0UWI1NEdUegpLajVrUElIUFFnT1MxbTdDaG5LOXFZZVUrN2FCMitoeXNKcXdOZ2JXSnlyZUE2
+        T2EzeG1rekNHNzNqM013Tmo3CnVhd2xsZUl2QytUMmlZM0Y2Ry94c3d1LzlyaGhwWUFOV09MVXoy
+        TnIycWFrdUdXUG9kbFdaTzM3Nnc5N09WKysKN3Q4amhaa3VpMGFZd1RTeFNPT2RFTXdGNndEOC9V
+        WWNnTmNPTE5YcWZuMUQwaE91UUFVakNlMGFOZVN3MnY5QQoxWmViWXR3a3RvVnczaXNEZ1dscmYr
+        Y1cxQm9aSzV5V25LZHV6T0U4a1VIWDkxVUM1d0lEQVFBQm8xTXdVVEFkCkJnTlZIUTRFRmdRVSsw
+        eFA3WERUZnBPRmxydlI1UXZOeU9IRDVuVXdId1lEVlIwakJCZ3dGb0FVKzB4UDdYRFQKZnBPRmxy
+        dlI1UXZOeU9IRDVuVXdEd1lEVlIwVEFRSC9CQVV3QXdFQi96QU5CZ2txaGtpRzl3MEJBUXNGQUFP
+        QwpBUUVBTDh0cFlybzFUNkdIWlczeVN0TTMvVitnd2p0cGw4aURTNlk2bDZvSE1tSzgxV04xTUt0
+        bWtoTTJoSHBqCkVkV3p2Q1pTQUVmaDN4SzRUVzRVdU5sdy9QZFBKT2w5OUc5Ymd2VkNzUTA0Ulc5
+        TUtjWnRTb2JPR1dCa05tN1YKcFVwaXJmUEJ6K1gyVUJlTXlFQk1CZnRTaG9ZTk9BeW9SY0FDTGwr
+        UkNNUEdrNkxWVDNSMG1McGN6Qk5tcTgwQQpxQzVPODgvRko3amFmVkVqa24wMHVvVE5pRjZ6VFpL
+        MDJocWNHVWdqdjhwM2twb1lTaVJDVWZhdWFjUlAxL004CllQemdlaWpnR3ozK2k0aFEzRGI3bDIr
+        SXpTN1ZsaEd5NnUza0VndVNYRnRhdjZQMHlIYW1TOHQ0TmJSWGEyN0gKeFJkSzZhM1p0UlFmTlQz
+        c3pLYUQyMHM5a1E9PQotLS0tLUVORCBDRVJUSUZJQ0FURS0tLS0tCg==
+      service:
+        name: repimage
+        namespace: kube-system
+        path: /pods
+    sideEffects: NoneOnDryRun
+    failurePolicy: Fail
+

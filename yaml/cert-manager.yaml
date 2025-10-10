@@ -1,0 +1,57 @@
+# Self-signed ClusterIssuer for generating CA certificate
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: repimage-selfsigned-issuer
+spec:
+  selfSigned: {}
+---
+# CA Certificate
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: repimage-ca
+  namespace: kube-system
+spec:
+  isCA: true
+  commonName: repimage-ca
+  secretName: repimage-ca-secret
+  privateKey:
+    algorithm: RSA
+    size: 2048
+  issuerRef:
+    name: repimage-selfsigned-issuer
+    kind: ClusterIssuer
+    group: cert-manager.io
+---
+# CA Issuer using the CA certificate
+apiVersion: cert-manager.io/v1
+kind: Issuer
+metadata:
+  name: repimage-ca-issuer
+  namespace: kube-system
+spec:
+  ca:
+    secretName: repimage-ca-secret
+---
+# Server Certificate for the webhook service
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: repimage-webhook-cert
+  namespace: kube-system
+spec:
+  secretName: repimage-webhook-tls
+  duration: 8760h # 1 year
+  renewBefore: 720h # 30 days
+  subject:
+    organizations:
+      - repimage
+  commonName: repimage.kube-system.svc
+  dnsNames:
+    - repimage.kube-system.svc
+    - repimage.kube-system.svc.cluster.local
+  issuerRef:
+    name: repimage-ca-issuer
+    kind: Issuer
+    group: cert-manager.io

@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io/ioutil"
 	"net/http"
+	"os"
 
 	"k8s.io/api/admission/v1"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
@@ -13,10 +14,28 @@ import (
 	"github.com/shixinghong/repimage/pkg/utils"
 )
 
-var (
-	cert = "./certs/serverCert.pem"
-	key  = "./certs/serverKey.pem"
-)
+func getCertPaths() (string, string) {
+	certPath := os.Getenv("TLS_CERT_PATH")
+	keyPath := os.Getenv("TLS_KEY_PATH")
+
+	// Default to cert-manager paths
+	if certPath == "" {
+		certPath = "/etc/webhook/certs/tls.crt"
+	}
+	if keyPath == "" {
+		keyPath = "/etc/webhook/certs/tls.key"
+	}
+
+	// Fallback to legacy paths if cert-manager paths don't exist
+	if _, err := os.Stat(certPath); os.IsNotExist(err) {
+		if _, err := os.Stat("./certs/serverCert.pem"); err == nil {
+			certPath = "./certs/serverCert.pem"
+			keyPath = "./certs/serverKey.pem"
+		}
+	}
+
+	return certPath, keyPath
+}
 
 func serve(w http.ResponseWriter, r *http.Request, admit utils.AdmitFunc) {
 	klog.Info(r.RequestURI)
@@ -63,6 +82,9 @@ func servePods(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	cert, key := getCertPaths()
+	klog.Infof("Using TLS cert: %s, key: %s", cert, key)
+
 	http.HandleFunc("/pods", servePods)
 	klog.Info("server start")
 	if err := http.ListenAndServeTLS(":8080", cert, key, nil); err != nil {
