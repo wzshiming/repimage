@@ -8,11 +8,7 @@
 # 快速上手
 ## 安装
 ```shell
-kubectl create -k yaml
-```
-## 卸载
-```shell
-kubectl delete -k yaml
+kubectl create -f https://files.m.daocloud.io/github.com/wzshiming/repimage/releases/download/latest/repimage.yaml
 ```
 
 # 使用后效果
