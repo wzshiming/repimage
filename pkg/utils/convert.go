@@ -8,6 +8,7 @@ import (
 // AdmitFunc 处理不同种类的请求
 type AdmitFunc func(v1.AdmissionReview) *v1.AdmissionResponse
 
+// ToAdmissionResponse converts an error into an AdmissionResponse
 func ToAdmissionResponse(err error) *v1.AdmissionResponse {
 	return &v1.AdmissionResponse{
 		Result: &metav1.Status{

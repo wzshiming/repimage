@@ -11,6 +11,7 @@ const (
 	prefix = "m.daocloud.io"
 )
 
+// ReplaceImageName adds a mirror prefix to container image names
 func ReplaceImageName(name string) string {
 	parts := strings.SplitN(name, "/", 3)
 	if parts[0] == prefix {

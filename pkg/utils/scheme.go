@@ -10,6 +10,8 @@ import (
 )
 
 var scheme = runtime.NewScheme()
+
+// Codecs provides serialization/deserialization for Kubernetes objects
 var Codecs = serializer.NewCodecFactory(scheme)
 
 func init() {

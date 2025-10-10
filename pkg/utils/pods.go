@@ -16,6 +16,7 @@ type patchSpec struct {
 	Value  corev1.PodSpec `json:"value"`
 }
 
+// AdmitPods processes admission review requests for pods and replaces container images
 func AdmitPods(ar admissionv1.AdmissionReview) *admissionv1.AdmissionResponse {
 	klog.Info("admitting pods...")
 	podResource := metav1.GroupVersionResource{
