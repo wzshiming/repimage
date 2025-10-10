@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"io"
 	"net/http"
+	"os"
 
 	"github.com/wzshiming/repimage/pkg/utils"
 	v1 "k8s.io/api/admission/v1"
@@ -12,9 +13,16 @@ import (
 )
 
 var (
-	cert = "./certs/serverCert.pem"
-	key  = "./certs/serverKey.pem"
+	cert = getEnvOrDefault("TLS_CERT_FILE", "./certs/serverCert.pem")
+	key  = getEnvOrDefault("TLS_KEY_FILE", "./certs/serverKey.pem")
 )
+
+func getEnvOrDefault(key, defaultValue string) string {
+	if value := os.Getenv(key); value != "" {
+		return value
+	}
+	return defaultValue
+}
 
 func serve(w http.ResponseWriter, r *http.Request, admit utils.AdmitFunc) {
 	klog.Infof("request URI: %s", r.RequestURI)
@@ -63,7 +71,7 @@ func servePods(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	http.HandleFunc("/pods", servePods)
-	klog.Info("server start")
+	klog.Infof("server starting with TLS cert: %s, key: %s", cert, key)
 	if err := http.ListenAndServeTLS(":443", cert, key, nil); err != nil {
 		klog.Exit(err)
 	}

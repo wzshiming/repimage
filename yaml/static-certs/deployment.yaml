@@ -25,16 +25,3 @@ spec:
         name: webhook
         ports:
         - containerPort: 443
-        env:
-        - name: TLS_CERT_FILE
-          value: /etc/certs/tls.crt
-        - name: TLS_KEY_FILE
-          value: /etc/certs/tls.key
-        volumeMounts:
-        - name: certs
-          mountPath: /etc/certs
-          readOnly: true
-      volumes:
-      - name: certs
-        secret:
-          secretName: repimage-tls
