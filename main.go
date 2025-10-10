@@ -2,7 +2,6 @@ package main
 
 import (
 	"encoding/json"
-	"fmt"
 	"io"
 	"net/http"
 
@@ -18,7 +17,7 @@ var (
 )
 
 func serve(w http.ResponseWriter, r *http.Request, admit utils.AdmitFunc) {
-	klog.Info(r.RequestURI)
+	klog.Infof("request URI: %s", r.RequestURI)
 	var body []byte
 	if r.Body != nil {
 		if data, err := io.ReadAll(r.Body); err == nil {
@@ -26,7 +25,7 @@ func serve(w http.ResponseWriter, r *http.Request, admit utils.AdmitFunc) {
 		}
 	}
 
-	klog.Info(fmt.Sprintf("handling request: %s", string(body)))
+	klog.Infof("handling request: %s", string(body))
 
 	reqAdmissionReview := v1.AdmissionReview{}
 	resAdmissionReview := v1.AdmissionReview{TypeMeta: metav1.TypeMeta{
@@ -44,7 +43,7 @@ func serve(w http.ResponseWriter, r *http.Request, admit utils.AdmitFunc) {
 
 	resAdmissionReview.Response.UID = reqAdmissionReview.Request.UID
 
-	klog.Info(fmt.Sprintf("sending response: %v", resAdmissionReview.Response))
+	klog.Infof("sending response: %v", resAdmissionReview.Response)
 
 	respBytes, err := json.Marshal(resAdmissionReview)
 	if err != nil {
