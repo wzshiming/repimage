@@ -26,7 +26,7 @@ nginx => m.daocloud.io/docker.io/library/nginx
  - 只有在 [public-image-mirror
    ](https://github.com/DaoCloud/public-image-mirror/blob/main/domain.txt)中的地址才会被替换，否则不会被替换
  - 替换的方式是**增加前缀**方式，不是**替换**方式
- - 目前只支持在amd64架构下的镜像替换，如果需要可以自行编译打包是使用
+ - 支持amd64和arm64架构的镜像替换
 
 
 

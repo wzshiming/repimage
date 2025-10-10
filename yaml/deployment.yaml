@@ -20,7 +20,7 @@ spec:
       containers:
       - command:
         - /repimage
-        image: repimage
+        image: ghcr.io/wzshiming/repimage:main
         imagePullPolicy: IfNotPresent
         name: webhook
         ports:
