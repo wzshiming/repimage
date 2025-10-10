@@ -8,7 +8,7 @@ import (
 )
 
 const (
-	mirrorProxyUrL = "https://mirror.ghproxy.com/https://raw.githubusercontent.com/DaoCloud/public-image-mirror/main/domain.txt"
+	mirrorProxyUrL = "https://files.m.daocloud.io/raw.githubusercontent.com/DaoCloud/public-image-mirror/main/domain.txt"
 )
 
 var (
