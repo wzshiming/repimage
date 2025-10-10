@@ -1,6 +1,6 @@
 module github.com/shixinghong/repimage
 
-go 1.21
+go 1.24
 
 require (
 	k8s.io/api v0.29.2
