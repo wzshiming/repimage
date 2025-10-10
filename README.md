@@ -10,8 +10,11 @@
 ## 前置要求
 
 本项目支持两种证书管理方式：
-1. **使用 Cert-Manager（推荐）** - 自动管理证书生命周期
-2. **手动生成证书** - 使用 `certs/gencerts.sh` 脚本手动生成证书
+
+| 方式 | 优点 | 缺点 | 推荐场景 |
+|------|------|------|----------|
+| **Cert-Manager** | 自动生成和续期证书<br/>无需手动管理证书<br/>CA 自动注入到 webhook | 需要安装 cert-manager | 生产环境<br/>长期使用 |
+| **手动生成** | 不依赖额外组件<br/>快速部署 | 需要手动管理证书<br/>证书过期需手动更新 | 测试环境<br/>临时使用 |
 
 ### 使用 Cert-Manager（推荐）
 
@@ -40,6 +43,8 @@ kubectl apply -f yaml/admission.yaml     ## 安装admission配置
 ```
 
 cert-manager 会自动生成和管理 TLS 证书，并注入到 MutatingWebhookConfiguration 中。
+
+详细的 Cert-Manager 集成指南请参考：[Cert-Manager 集成指南](docs/cert-manager-guide.md)
 
 ### 使用手动生成的证书
 
