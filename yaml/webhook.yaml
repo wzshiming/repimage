@@ -21,6 +21,11 @@ spec:
             - containerPort: 8080
           command:
             - /repimage
+          env:
+            - name: ALLOWLIST_FILE
+              value: "/etc/repimage/allowlist.txt"
+            - name: ALLOWLIST_UPDATE_INTERVAL
+              value: "1h"
       restartPolicy: Always
   selector:
     matchLabels:

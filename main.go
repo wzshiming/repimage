@@ -63,6 +63,9 @@ func servePods(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+	// Initialize domain map at startup
+	utils.InitDomainMap()
+	
 	http.HandleFunc("/pods", servePods)
 	klog.Info("server start")
 	if err := http.ListenAndServeTLS(":8080", cert, key, nil); err != nil {

@@ -18,6 +18,26 @@ kubectl apply -f  yaml/admission.yaml
 kubectl delete -f  yaml/webhook.yaml -f yaml/admission.yaml
 ```
 
+# 配置选项
+
+repimage 现在支持多种方式配置域名替换列表（allowlist）：
+
+## 环境变量配置
+
+- `ALLOWLIST_FILE`: 指定包含域名映射的文件路径（默认：`/etc/repimage/allowlist.txt`）
+- `ALLOWLIST_URL`: 指定获取域名映射的URL（默认：DaoCloud公共镜像仓库）
+- `ALLOWLIST_UPDATE_INTERVAL`: 设置更新间隔，如 `30m`, `1h`, `24h`（默认：`1h`，设为`0`禁用更新）
+
+详细配置说明请参考：[Allowlist配置指南](docs/ALLOWLIST_CONFIG.md)
+
+## 特性
+
+- ✅ **默认内置映射列表**：应用包含常用镜像仓库的默认映射
+- ✅ **构建时获取**：Docker镜像构建时自动下载最新映射列表
+- ✅ **参数化配置**：支持通过环境变量和配置文件自定义映射
+- ✅ **定期更新**：支持定期从URL更新映射列表
+- ✅ **多级回退**：文件 → URL → 默认内置列表的加载优先级
+
 # 使用后效果
 自动替换yaml文件中的镜像地址，例如: 
 ```

@@ -1,10 +1,18 @@
 package utils
 
 import (
+	"os"
 	"testing"
 )
 
 func TestReplaceImageName(t *testing.T) {
+	// Set up test environment - use default embedded allowlist
+	os.Setenv("ALLOWLIST_UPDATE_INTERVAL", "0") // Disable periodic updates in tests
+	defer os.Unsetenv("ALLOWLIST_UPDATE_INTERVAL")
+	
+	// Initialize domain map for testing
+	InitDomainMap()
+	
 	type args struct {
 		name string
 	}
