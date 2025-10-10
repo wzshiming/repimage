@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: repimage
+  namespace: kube-system
+  labels:
+    app: repimage
+spec:
+  ports:
+  - port: 443
+    targetPort: 443
+  selector:
+    app: repimage
+  type: ClusterIP

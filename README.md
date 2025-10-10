@@ -7,6 +7,27 @@
 
 # 快速上手
 ## 安装
+
+### 方式一: 使用 Cert-Manager（推荐）
+如果你的集群中已经安装了 [cert-manager](https://cert-manager.io/)，推荐使用这种方式，cert-manager 会自动管理证书的生成和更新。
+
+1. 确保 cert-manager 已经安装在集群中：
+```shell
+kubectl apply -f https://github.com/cert-manager/cert-manager/releases/download/v1.13.0/cert-manager.yaml
+```
+
+2. 安装 repimage：
+```shell
+kubectl apply -k https://github.com/wzshiming/repimage/yaml
+```
+
+### 方式二: 使用预生成证书
+如果你的集群中没有 cert-manager，可以使用预生成的证书：
+```shell
+kubectl apply -k https://github.com/wzshiming/repimage/yaml/static-certs
+```
+
+或者使用预编译的单文件（推荐用于快速测试）：
 ```shell
 kubectl create -f https://files.m.daocloud.io/github.com/wzshiming/repimage/releases/download/latest/repimage.yaml
 ```
@@ -18,6 +39,10 @@ k8s.gcr.io/coredns/coredns => m.daocloud.io/k8s.gcr.io/coredns/coredns
 
 nginx => m.daocloud.io/docker.io/library/nginx
 ```
+
+# 文档
+
+- [Cert-Manager 集成文档](docs/cert-manager.md) - 如何使用 cert-manager 自动管理 TLS 证书
 
 # License
 
