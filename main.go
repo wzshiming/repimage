@@ -12,11 +12,12 @@ import (
 )
 
 var (
-	cert = "./certs/serverCert.pem"
-	key  = "./certs/serverKey.pem"
+	cert   = "./certs/serverCert.pem"
+	key    = "./certs/serverKey.pem"
+	prefix = "m.daocloud.io"
 )
 
-func serve(w http.ResponseWriter, r *http.Request, admit utils.AdmitFunc) {
+func serve(w http.ResponseWriter, r *http.Request, prefix string, admit utils.AdmitFunc) {
 	klog.Infof("request URI: %s", r.RequestURI)
 	var body []byte
 	if r.Body != nil {
@@ -40,7 +41,7 @@ func serve(w http.ResponseWriter, r *http.Request, admit utils.AdmitFunc) {
 		klog.Error(err)
 		resAdmissionReview.Response = utils.ToAdmissionResponse(err)
 	} else {
-		resAdmissionReview.Response = admit(reqAdmissionReview)
+		resAdmissionReview.Response = admit(prefix, reqAdmissionReview)
 	}
 
 	resAdmissionReview.Response.UID = reqAdmissionReview.Request.UID
@@ -58,7 +59,7 @@ func serve(w http.ResponseWriter, r *http.Request, admit utils.AdmitFunc) {
 }
 
 func servePods(w http.ResponseWriter, r *http.Request) {
-	serve(w, r, utils.AdmitPods)
+	serve(w, r, prefix, utils.AdmitPods)
 }
 
 func main() {

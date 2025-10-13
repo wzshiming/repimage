@@ -17,7 +17,7 @@ type patchSpec struct {
 }
 
 // AdmitPods processes admission review requests for pods and replaces container images
-func AdmitPods(ar admissionv1.AdmissionReview) *admissionv1.AdmissionResponse {
+func AdmitPods(prefix string, ar admissionv1.AdmissionReview) *admissionv1.AdmissionResponse {
 	klog.Info("admitting pods...")
 	podResource := metav1.GroupVersionResource{
 		Group:    "",
@@ -43,7 +43,7 @@ func AdmitPods(ar admissionv1.AdmissionReview) *admissionv1.AdmissionResponse {
 
 	var updated bool
 	for i, container := range containers {
-		newImage := ReplaceImageName(container.Image)
+		newImage := ReplaceImageName(prefix, container.Image)
 		if newImage != container.Image {
 			containers[i].Image = newImage
 			updated = true
