@@ -46,6 +46,14 @@ func TestReplaceImageName(t *testing.T) {
 			},
 			want: "m.daocloud.io/k8s.gcr.io/hongshixing/nginx:v1.1.1",
 		},
+		{
+			name: "case5 - different prefix",
+			args: args{
+				prefix: "mirror.example.com",
+				name:   "nginx",
+			},
+			want: "mirror.example.com/docker.io/library/nginx",
+		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
