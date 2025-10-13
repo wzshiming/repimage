@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"flag"
 	"io"
 	"net/http"
 
@@ -12,9 +13,9 @@ import (
 )
 
 var (
-	cert   = "./certs/serverCert.pem"
-	key    = "./certs/serverKey.pem"
-	prefix = "m.daocloud.io"
+	cert   = flag.String("cert", "./certs/serverCert.pem", "Path to TLS certificate file")
+	key    = flag.String("key", "./certs/serverKey.pem", "Path to TLS key file")
+	prefix = flag.String("prefix", "m.daocloud.io", "Image mirror prefix")
 )
 
 func serve(w http.ResponseWriter, r *http.Request, prefix string, admit utils.AdmitFunc) {
@@ -59,13 +60,15 @@ func serve(w http.ResponseWriter, r *http.Request, prefix string, admit utils.Ad
 }
 
 func servePods(w http.ResponseWriter, r *http.Request) {
-	serve(w, r, prefix, utils.AdmitPods)
+	serve(w, r, *prefix, utils.AdmitPods)
 }
 
 func main() {
+	klog.InitFlags(nil)
+	flag.Parse()
 	http.HandleFunc("/pods", servePods)
 	klog.Info("server start")
-	if err := http.ListenAndServeTLS(":443", cert, key, nil); err != nil {
+	if err := http.ListenAndServeTLS(":443", *cert, *key, nil); err != nil {
 		klog.Exit(err)
 	}
 }
