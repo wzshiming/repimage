@@ -9,6 +9,7 @@
 ## 安装
 ```shell
 kubectl create -f https://files.m.daocloud.io/github.com/wzshiming/repimage/releases/download/latest/repimage.yaml
+kubectl rollout status deployment/repimage -n kube-system
 ```
 
 # 使用后效果
