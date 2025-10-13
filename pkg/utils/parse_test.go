@@ -6,7 +6,8 @@ import (
 
 func TestReplaceImageName(t *testing.T) {
 	type args struct {
-		name string
+		prefix string
+		name   string
 	}
 	tests := []struct {
 		name string
@@ -16,35 +17,47 @@ func TestReplaceImageName(t *testing.T) {
 		{
 			name: "case1",
 			args: args{
-				name: "nginx",
+				prefix: "m.daocloud.io",
+				name:   "nginx",
 			},
 			want: "m.daocloud.io/docker.io/library/nginx",
 		},
 		{
 			name: "case2",
 			args: args{
-				name: "nginx:v1.1.1",
+				prefix: "m.daocloud.io",
+				name:   "nginx:v1.1.1",
 			},
 			want: "m.daocloud.io/docker.io/library/nginx:v1.1.1",
 		},
 		{
 			name: "case3",
 			args: args{
-				name: "hongshixing/nginx:v1.1.1",
+				prefix: "m.daocloud.io",
+				name:   "hongshixing/nginx:v1.1.1",
 			},
 			want: "m.daocloud.io/docker.io/hongshixing/nginx:v1.1.1",
 		},
 		{
 			name: "case4",
 			args: args{
-				name: "k8s.gcr.io/hongshixing/nginx:v1.1.1",
+				prefix: "m.daocloud.io",
+				name:   "k8s.gcr.io/hongshixing/nginx:v1.1.1",
 			},
 			want: "m.daocloud.io/k8s.gcr.io/hongshixing/nginx:v1.1.1",
+		},
+		{
+			name: "case5 - different prefix",
+			args: args{
+				prefix: "mirror.example.com",
+				name:   "nginx",
+			},
+			want: "mirror.example.com/docker.io/library/nginx",
 		},
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := ReplaceImageName(tt.args.name); got != tt.want {
+			if got := ReplaceImageName(tt.args.prefix, tt.args.name); got != tt.want {
 				t.Errorf("ReplaceImageName() = %v, want %v", got, tt.want)
 			}
 		})
