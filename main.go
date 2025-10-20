@@ -5,6 +5,7 @@ import (
 	"flag"
 	"io"
 	"net/http"
+	"strings"
 
 	"github.com/wzshiming/repimage/pkg/utils"
 	v1 "k8s.io/api/admission/v1"
@@ -13,12 +14,13 @@ import (
 )
 
 var (
-	cert   = flag.String("cert", "./certs/serverCert.pem", "Path to TLS certificate file")
-	key    = flag.String("key", "./certs/serverKey.pem", "Path to TLS key file")
-	prefix = flag.String("prefix", "m.daocloud.io", "Image mirror prefix")
+	cert          = flag.String("cert", "./certs/serverCert.pem", "Path to TLS certificate file")
+	key           = flag.String("key", "./certs/serverKey.pem", "Path to TLS key file")
+	prefix        = flag.String("prefix", "m.daocloud.io", "Image mirror prefix")
+	ignoreDomains = flag.String("ignore-domains", "", "Comma-separated list of domains to ignore (not replace)")
 )
 
-func serve(w http.ResponseWriter, r *http.Request, prefix string, admit utils.AdmitFunc) {
+func serve(w http.ResponseWriter, r *http.Request, prefix string, ignoreDomains []string) {
 	klog.Infof("request URI: %s", r.RequestURI)
 	var body []byte
 	if r.Body != nil {
@@ -42,7 +44,7 @@ func serve(w http.ResponseWriter, r *http.Request, prefix string, admit utils.Ad
 		klog.Error(err)
 		resAdmissionReview.Response = utils.ToAdmissionResponse(err)
 	} else {
-		resAdmissionReview.Response = admit(prefix, reqAdmissionReview)
+		resAdmissionReview.Response = utils.AdmitPods(prefix, ignoreDomains, reqAdmissionReview)
 	}
 
 	resAdmissionReview.Response.UID = reqAdmissionReview.Request.UID
@@ -60,7 +62,15 @@ func serve(w http.ResponseWriter, r *http.Request, prefix string, admit utils.Ad
 }
 
 func servePods(w http.ResponseWriter, r *http.Request) {
-	serve(w, r, *prefix, utils.AdmitPods)
+	var domains []string
+	if *ignoreDomains != "" {
+		domains = strings.Split(*ignoreDomains, ",")
+		// Trim whitespace from each domain
+		for i := range domains {
+			domains[i] = strings.TrimSpace(domains[i])
+		}
+	}
+	serve(w, r, *prefix, domains)
 }
 
 func main() {

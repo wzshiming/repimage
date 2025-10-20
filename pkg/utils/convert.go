@@ -5,8 +5,6 @@ import (
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 )
 
-type AdmitFunc func(prefix string, ar v1.AdmissionReview) *v1.AdmissionResponse
-
 // ToAdmissionResponse converts an error into an AdmissionResponse
 func ToAdmissionResponse(err error) *v1.AdmissionResponse {
 	return &v1.AdmissionResponse{

@@ -16,8 +16,8 @@ type patchSpec struct {
 	Value  corev1.PodSpec `json:"value"`
 }
 
-// AdmitPods processes admission review requests for pods and replaces container images
-func AdmitPods(prefix string, ar admissionv1.AdmissionReview) *admissionv1.AdmissionResponse {
+// AdmitPods processes admission review requests for pods and replaces container images, skipping ignored domains
+func AdmitPods(prefix string, ignoreDomains []string, ar admissionv1.AdmissionReview) *admissionv1.AdmissionResponse {
 	klog.Info("admitting pods...")
 	podResource := metav1.GroupVersionResource{
 		Group:    "",
@@ -43,7 +43,7 @@ func AdmitPods(prefix string, ar admissionv1.AdmissionReview) *admissionv1.Admis
 
 	var updated bool
 	for i, container := range containers {
-		newImage := ReplaceImageName(prefix, container.Image)
+		newImage := ReplaceImageName(prefix, ignoreDomains, container.Image)
 		if newImage != container.Image {
 			containers[i].Image = newImage
 			updated = true
