@@ -20,6 +20,8 @@ spec:
       containers:
       - command:
         - /repimage
+        # Uncomment the following lines to ignore specified domains
+        # - --ignore-domains=myregistry.example.com,private.registry.local
         image: m.daocloud.io/ghcr.io/wzshiming/repimage:main
         imagePullPolicy: IfNotPresent
         name: webhook

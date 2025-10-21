@@ -20,6 +20,29 @@ k8s.gcr.io/coredns/coredns => m.daocloud.io/k8s.gcr.io/coredns/coredns
 nginx => m.daocloud.io/docker.io/library/nginx
 ```
 
+# 配置选项
+## 忽略指定域名
+如果你有一些私有镜像仓库或者不需要加速的域名，可以通过 `--ignore-domains` 参数来忽略这些域名。
+
+例如，在 deployment.yaml 中添加参数：
+```yaml
+containers:
+- command:
+  - /repimage
+  - --ignore-domains=myregistry.example.com,private.registry.local
+```
+
+这样，来自 `myregistry.example.com` 和 `private.registry.local` 的镜像将不会被替换。
+
+## 自定义镜像前缀
+默认使用 `m.daocloud.io` 作为镜像前缀，可以通过 `--prefix` 参数自定义：
+```yaml
+containers:
+- command:
+  - /repimage
+  - --prefix=mirror.example.com
+```
+
 # License
 
 Apache-2.0
