@@ -43,6 +43,8 @@ containers:
   - --prefix=mirror.example.com
 ```
 
+建议内网再部署一级缓存, 可以使用 `--prefix=你的内网地址/mirror.example.com`
+
 # License
 
 Apache-2.0
