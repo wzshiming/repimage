@@ -13,7 +13,7 @@ kubectl rollout status deployment/repimage -n kube-system
 ```
 
 # 使用后效果
-自动替换yaml文件中的镜像地址，例如: 
+自动替换yaml文件中的镜像地址，例如:
 ```
 k8s.gcr.io/coredns/coredns => m.daocloud.io/k8s.gcr.io/coredns/coredns
 
@@ -27,9 +27,9 @@ nginx => m.daocloud.io/docker.io/library/nginx
 例如，在 deployment.yaml 中添加参数：
 ```yaml
 containers:
-- command:
-  - /repimage
-  - --ignore-domains=myregistry.example.com,private.registry.local
+  - command:
+      - /repimage
+      - --ignore-domains=myregistry.example.com,private.registry.local
 ```
 
 这样，来自 `myregistry.example.com` 和 `private.registry.local` 的镜像将不会被替换。
@@ -38,12 +38,31 @@ containers:
 默认使用 `m.daocloud.io` 作为镜像前缀，可以通过 `--prefix` 参数自定义：
 ```yaml
 containers:
-- command:
-  - /repimage
-  - --prefix=mirror.example.com
+  - command:
+      - /repimage
+      - --prefix=mirror.example.com
 ```
 
 建议内网再部署一级缓存, 可以使用 `--prefix=你的内网地址/mirror.example.com`
+
+## 忽略特定Pod
+如果你希望某些Pod不被镜像替换，可以在Pod的annotation中添加 `repimage.kubernetes.io/skip=true`。
+
+例如：
+```yaml
+apiVersion: v1
+kind: Pod
+metadata:
+  name: example-pod
+  annotations:
+    repimage.kubernetes.io/skip: "true"
+spec:
+  containers:
+  - name: example-container
+    image: nginx
+```
+
+带有此annotation的Pod将不会被镜像替换。
 
 # License
 

@@ -10,6 +10,11 @@ import (
 	"k8s.io/klog/v2"
 )
 
+const (
+	// SkipImageRewriteAnnotation is the annotation key to skip image rewriting
+	SkipImageRewriteAnnotation = "repimage.kubernetes.io/skip"
+)
+
 type patchSpec struct {
 	Option string         `json:"op"`
 	Path   string         `json:"path"`
@@ -36,6 +41,16 @@ func AdmitPods(prefix string, ignoreDomains []string, ar admissionv1.AdmissionRe
 	if _, _, err := deserializer.Decode(raw, nil, pod); err != nil {
 		klog.Error(err)
 		return ToAdmissionResponse(err)
+	}
+
+	// Check if the pod has the annotation to skip image rewriting
+	if pod.Annotations != nil {
+		if skip, exists := pod.Annotations[SkipImageRewriteAnnotation]; exists && skip == "true" {
+			klog.Info("pod has skip annotation, skipping image rewriting")
+			reviewResponse := admissionv1.AdmissionResponse{}
+			reviewResponse.Allowed = true
+			return &reviewResponse
+		}
 	}
 
 	reviewResponse := admissionv1.AdmissionResponse{}
