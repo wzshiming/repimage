@@ -35,15 +35,17 @@ containers:
 这样，来自 `myregistry.example.com` 和 `private.registry.local` 的镜像将不会被替换。
 
 ## 自定义镜像前缀
-默认使用 `m.daocloud.io` 作为镜像前缀，可以通过 `--prefix` 参数自定义：
+
+[内网再部署一级缓存](https://github.com/DaoCloud/public-image-mirror/tree/main/docs/local-cache)
+
+当前默认使用 `m.daocloud.io` 作为镜像前缀，可以通过 `--prefix` 参数自定义：
+
 ```yaml
 containers:
   - command:
       - /repimage
       - --prefix=mirror.example.com
 ```
-
-建议内网再部署一级缓存, 可以使用 `--prefix=你的内网地址/mirror.example.com`
 
 ## 忽略特定Pod
 如果你希望某些Pod不被镜像替换，可以在Pod的annotation中添加 `repimage.kubernetes.io/skip=true`。
