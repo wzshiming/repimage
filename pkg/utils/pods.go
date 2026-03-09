@@ -54,13 +54,21 @@ func AdmitPods(prefix string, ignoreDomains []string, ar admissionv1.AdmissionRe
 	}
 
 	reviewResponse := admissionv1.AdmissionResponse{}
-	containers := pod.Spec.Containers
 
 	var updated bool
-	for i, container := range containers {
-		newImage := ReplaceImageName(prefix, ignoreDomains, container.Image)
-		if newImage != container.Image {
-			containers[i].Image = newImage
+
+	for i, c := range pod.Spec.InitContainers {
+		newImage := ReplaceImageName(prefix, ignoreDomains, c.Image)
+		if newImage != c.Image {
+			pod.Spec.InitContainers[i].Image = newImage
+			updated = true
+		}
+	}
+
+	for i, c := range pod.Spec.Containers {
+		newImage := ReplaceImageName(prefix, ignoreDomains, c.Image)
+		if newImage != c.Image {
+			pod.Spec.Containers[i].Image = newImage
 			updated = true
 		}
 	}
